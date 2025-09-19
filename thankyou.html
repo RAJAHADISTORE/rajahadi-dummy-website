@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Thank You — PUBGServices</title>
+<link rel="icon" href="data:,">
+<style>
+  body{margin:0;min-height:100vh;font-family:Inter,Arial;background:linear-gradient(180deg,#041020,#021022);color:#e8f8ff;display:flex;align-items:center;justify-content:center}
+  .card{width:min(900px,94%);padding:28px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.04));box-shadow:0 30px 90px rgba(0,0,0,0.6);text-align:center}
+  h2{margin:0;color:#33d1ff}
+  p{color:#a7c8d8}
+  .btn{display:inline-block;margin-top:16px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,#00aaff,#33d1ff);color:#021a22;text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h2>Thank You! 🎉</h2>
+    <p style="margin-top:10px">Your order has been received. Our team will start delivery once payment is confirmed.</p>
+    <div id="info" style="margin-top:16px;color:#cfeeff"></div>
+    <a class="btn" href="index.html">Back to Home</a>
+  </div>
+
+<script>
+  // show minimal order info if present
+  const q = new URLSearchParams(window.location.search);
+  // the confirm page sends nothing by default (GET). We rely on sessionStorage
+  const order = sessionStorage.getItem('planLabel') || '—';
+  const price = sessionStorage.getItem('planPrice') || '—';
+  const pubg = sessionStorage.getItem('pubgId') || '—';
+  const username = sessionStorage.getItem('username') || '—';
+  const whatsapp = sessionStorage.getItem('whatsapp') || '—';
+
+  document.getElementById('info').innerHTML = `
+    <div style="font-weight:700">${order} • ${price ? price + ' PKR' : ''}</div>
+    <div style="margin-top:8px">PUBG: ${pubg} • ${username}</div>
+    <div style="margin-top:8px">WhatsApp: ${whatsapp}</div>
+    <div style="margin-top:12px;color:#9fb9cc;font-size:13px">We will contact you on WhatsApp for updates. Keep your account accessible during delivery.</div>
+  `;
+
+  // optionally clear session after a short time
+  // setTimeout(()=> sessionStorage.clear(), 60000);
+</script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PUBGServices — UC & Popularity</title>
+<link rel="icon" href="data:,">
+<style>
+  /* ====== Theme variables ====== */
+  :root{
+    --bg:#07070a;
+    --panel:#0f1620;
+    --blue:#00aaff;
+    --cyan:#33d1ff;
+    --muted:#97a3b3;
+    --glass: rgba(255,255,255,0.03);
+    --accent-glow: 0 8px 40px rgba(0,170,255,0.12), 0 0 30px rgba(0,170,255,0.06);
+    --card-radius:18px;
+  }
+
+  /* ====== Base ====== */
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(0,170,255,0.03), transparent),
+                radial-gradient(800px 400px at 90% 90%, rgba(51,209,255,0.02), transparent),
+                var(--bg);
+    color:#e6eef8;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  header{
+    padding:18px 28px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    border-bottom:1px solid rgba(255,255,255,0.03);
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    cursor:default;
+  }
+  .logo{
+    width:56px;height:56px;
+    background: linear-gradient(135deg,var(--blue),var(--cyan));
+    border-radius:12px;
+    box-shadow: 0 6px 30px rgba(0,170,255,0.12), inset 0 -6px 18px rgba(0,0,0,0.4);
+    display:grid;place-items:center;
+    font-weight:800;color:#021a22;font-size:18px;
+    transform: perspective(600px) rotateX(8deg);
+  }
+  h1{margin:0;font-size:20px;letter-spacing:1px}
+  nav{margin-left:auto; display:flex; gap:10px; align-items:center;}
+  .nav-link{
+    color:var(--blue); text-decoration:none; font-weight:600; padding:8px 12px; border-radius:10px;
+    transition: all .25s ease;
+  }
+  .nav-link:hover{ background: rgba(0,170,255,0.06); box-shadow: 0 6px 20px rgba(0,170,255,0.06); transform: translateY(-4px) scale(1.01);}
+
+  main.container{
+    width: min(1180px, 94%);
+    margin:28px auto;
+    display:grid;
+    grid-template-columns: 1fr 360px;
+    gap:28px;
+    align-items:start;
+    padding-bottom:60px;
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+    padding:28px;
+    border-radius: var(--card-radius);
+    box-shadow: var(--accent-glow);
+    transform: perspective(1000px) rotateX(1deg);
+  }
+  .hero-top{display:flex;align-items:center;gap:18px;}
+  .hero-badge{font-weight:700;color:#021a22;background:var(--blue);padding:8px 12px;border-radius:10px;}
+  .hero-title{font-size:26px;margin:6px 0 0 0}
+  .hero-sub{color:var(--muted); margin-top:8px}
+  .cta-row{margin-top:16px; display:flex; gap:12px; flex-wrap:wrap}
+  .btn{
+    background: linear-gradient(90deg,var(--blue),var(--cyan));
+    color:#021a22; font-weight:700; padding:12px 16px; border-radius:12px; border:none; cursor:pointer;
+    box-shadow: 0 10px 30px rgba(0,170,255,0.12);
+    text-decoration:none;
+  }
+  .ghost{
+    background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted);
+  }
+
+  /* ===== PLANS GRID ===== */
+  .grid{
+    margin-top:18px; display:grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap:16px;
+  }
+  .plan{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+    border-radius:14px; padding:16px; min-height:120px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    transform: perspective(700px) rotateX(6deg);
+    transition: transform .3s ease, box-shadow .3s ease;
+    border: 1px solid rgba(255,255,255,0.02);
+  }
+  .plan:hover{ transform: translateY(-10px) rotateX(4deg); box-shadow: 0 22px 60px rgba(0,170,255,0.14); }
+  .plan h4{margin:0;color:var(--cyan)}
+  .price{font-size:20px;font-weight:800;margin-top:6px;color:var(--blue)}
+  .plan small{display:block;color:var(--muted); margin-top:8px}
+
+  /* ===== SIDEBAR (quick features + payment) ===== */
+  aside.sidebar{
+    position:relative; padding:18px; border-radius:16px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  }
+  .box{padding:12px;border-radius:12px;background:var(--glass); margin-bottom:12px; border:1px solid rgba(255,255,255,0.02)}
+  .pay-list{display:flex;flex-direction:column;gap:8px}
+  .pay-item{display:flex;align-items:center;gap:12px;padding:8px;border-radius:10px}
+  .pay-active{background: linear-gradient(90deg, rgba(0,170,255,0.06), rgba(51,209,255,0.03)); border:1px solid rgba(0,170,255,0.08)}
+
+  /* ===== FOOTER ===== */
+  footer{margin-top:auto;padding:20px;text-align:center;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02)}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:980px){
+    main.container{grid-template-columns:1fr; padding:0 16px}
+    aside.sidebar{order:2}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">PG</div>
+    <div>
+      <h1>PUBGServices</h1>
+      <div style="color:var(--muted);font-size:12px;margin-top:4px">Fast • Secure • Trusted by 10K+ players</div>
+    </div>
+  </div>
+
+  <nav>
+    <a class="nav-link" href="#home">Home</a>
+    <a class="nav-link" href="#popularity">Popularity</a>
+    <a class="nav-link" href="#uc">UC</a>
+    <a class="nav-link" href="#about">About</a>
+    <a class="nav-link" href="#faq">FAQ</a>
+    <a class="nav-link" href="#reviews">Reviews</a>
+  </nav>
+</header>
+
+<main class="container">
+  <section>
+    <div id="home" class="hero">
+      <div class="hero-top">
+        <div class="hero-badge">LIVE</div>
+        <div>
+          <div class="hero-title">Dominate PUBG — Buy Popularity & UC</div>
+          <div class="hero-sub">Instant delivery • Easypaisa active • JazzCash & Bank transfer coming soon</div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn" href="#popularity">View Popularity Plans</a>
+        <a class="btn ghost" href="#uc">View UC Plans</a>
+        <a class="btn ghost" href="buy.html?plan=quick" id="quickBuy">Quick Buy</a>
+      </div>
+
+      <!-- Popularity Plans -->
+      <h3 style="margin-top:20px;color:var(--cyan)">Popularity Plans</h3>
+      <div id="popularity" class="grid" aria-live="polite">
+        <article class="plan">
+          <h4>10K Popularity</h4>
+          <div class="price">350 PKR</div>
+          <small><ul>
+  <li>Deliviry With In 1-6 Hour</li>
+  <li>Popularity is sent player-to-player as gifts</li>
+  <li>Delivery is made directly to your PUBG ID</li>
+  <li>No login information required at any stage</li>
+  <li>100% Legal & Safe – no risk of ban</li>
+</ul></small>
+          <div style="margin-top:10px">
+            <a class="btn" href="buy.html?type=popularity&amount=10k&price=350">Buy Now</a>
+          </div>
+        </article>
+
+        <article class="plan">
+          <h4>20K Popularity</h4>
+          <div class="price">700 PKR</div>
+          <small><ul>
+  <li>Deliviry With In 1-6 Hour</li>
+  <li>Popularity is sent player-to-player as gifts</li>
+  <li>Delivery is made directly to your PUBG ID</li>
+  <li>No login information required at any stage</li>
+  <li>100% Legal & Safe – no risk of ban</li>
+</ul></small>
+          <div style="margin-top:10px">
+            <a class="btn" href="buy.html?type=popularity&amount=20k&price=700">Buy Now</a>
+          </div>
+        </article>
+
+        <article class="plan">
+          <h4>30K Popularity</h4>
+          <div class="price">1100 PKR</div>
+          <small><ul>
+  <li>Deliviry With In 1-6 Hour</li>
+  <li>Popularity is sent player-to-player as gifts</li>
+  <li>Delivery is made directly to your PUBG ID</li>
+  <li>No login information required at any stage</li>
+  <li>100% Legal & Safe – no risk of ban</li>
+</ul></small>
+          <div style="margin-top:10px">
+            <a class="btn" href="buy.html?type=popularity&amount=30k&price=1100">Buy Now</a>
+          </div>
+        </article>
+
+        <article class="plan">
+          <h4>40K Popularity</h4>
+          <div class="price">1450 PKR</div>
+          <small><ul>
+  <li>Deliviry With In 1-6 Hour</li>
+  <li>Popularity is sent player-to-player as gifts</li>
+  <li>Delivery is made directly to your PUBG ID</li>
+  <li>No login information required at any stage</li>
+  <li>100% Legal & Safe – no risk of ban</li>
+</ul></small>
+          <div style="margin-top:10px">
+            <a class="btn" href="buy.html?type=popularity&amount=40k&price=1450">Buy Now</a>
+          </div>
+        </article>
+
+        <article class="plan">
+          <h4>50K Popularity</h4>
+          <div class="price">1800 PKR</div>
+          <small><ul>
+  <li>Deliviry With In 1-6 Hour</li>
+  <li>Popularity is sent player-to-player as gifts</li>
+  <li>Delivery is made directly to your PUBG ID</li>
+  <li>No login information required at any stage</li>
+  <li>100% Legal & Safe – no risk of ban</li>
+</ul></small>
+          <div style="margin-top:10px">
+            <a class="btn" href="buy.html?type=popularity&amount=50k&price=1800">Buy Now</a>
+          </div>
+        </article>
+
+        <article class="plan">
+          <h4>100K Popularity</h4>
+          <div class="price">3550 PKR</div>
+          <small>
+            
+            <ul>
+  <li>Deliviry With In 1-6 Hour</li>
+  <li>Popularity is sent player-to-player as gifts</li>
+  <li>Delivery is made directly to your PUBG ID</li>
+  <li>No login information required at any stage</li>
+  <li>100% Legal & Safe – no risk of ban</li>
+</ul>
+
+</small>
+          <div style="margin-top:10px">
+            <a  class="btn" href="buy.html?type=popularity&amount=100k&price=3550">Buy Now</a>
+          </div>
+        </article>
+      </div>
+
+      <!-- UC Plans -->
+      <h3 id="uc" style="margin-top:22px;color:var(--cyan)">UC Plans</h3>
+      <div class="grid" style="margin-bottom:6px">
+        <article class="plan">
+          <h4>30 UC</h4><div class="price">135 PKR</div>
+          <small><ul>
+  <li>Deliviry With In 1-6 Hour</li>
+  <li>UC is sent player-to-player as gifts</li>
+  <li>Delivery is made directly to your PUBG ID</li>
+  <li>No login information required at any stage</li>
+  <li>100% Legal & Safe – no risk of ban</li>
+</ul></small>
+          <div style="margin-top:10px"><a class="btn" href="buy.html?type=uc&amount=30&price=135">Buy Now</a></div>
+        </article>
+
+        <article class="plan">
+          <h4>60 UC</h4><div class="price">255 PKR</div>
+          <small><ul>
+  <li>Deliviry With In 1-6 Hour</li>
+  <li>UC is sent player-to-player as gifts</li>
+  <li>Delivery is made directly to your PUBG ID</li>
+  <li>No login information required at any stage</li>
+  <li>100% Legal & Safe – no risk of ban</li>
+</ul></small>
+          <div style="margin-top:10px"><a class="btn" href="buy.html?type=uc&amount=60&price=255">Buy Now</a></div>
+        </article>
+
+        <article class="plan">
+          <h4>300 + 25 UC</h4><div class="price">1260 PKR</div>
+          <small><ul>
+  <li>Deliviry With In 1-6 Hour</li>
+  <li>UC is sent player-to-player as gifts</li>
+  <li>Delivery is made directly to your PUBG ID</li>
+  <li>No login information required at any stage</li>
+  <li>100% Legal & Safe – no risk of ban</li>
+</ul></small>
+          <div style="margin-top:10px"><a class="btn" href="buy.html?type=uc&amount=300plus25&price=1260">Buy Now</a></div>
+        </article>
+      </div>
+
+      <!-- About -->
+      <div id="about" class="box" style="margin-top:18px">
+        <h4 style="margin:0;color:var(--cyan)">About Us</h4>
+        <p style="margin:8px 0;color:var(--muted)"> Raja Hadi , your trusted partner for PUBG Mobile UC and Popularity.
+We are a dedicated team of gamers who understand the needs of PUBG players and provide:
+
+⚡ Instant Delivery – Fast and reliable service without delays.
+
+🔒 Secure Payments – Easypaisa (active), JazzCash & Bank Transfer (coming soon).
+
+🌍 Worldwide Service – Trusted by thousands of PUBG players globally.
+
+🤝 Customer Friendly Support – Always here to help you.
+
+Our mission is simple:
+To provide PUBG UC & Popularity at the most affordable rates with top-quality service.
+
+We believe in trust, speed, and customer satisfaction. That’s why more than 10,000+ players have already trusted us to boost their PUBG gaming journey. Your satisfaction and account safety are our priority.</p>
+      </div>
+
+      <!-- FAQ / Reviews anchor placeholders -->
+      <div id="faq" class="box">
+        <h4 style="margin:0;color:var(--cyan)">FAQ</h4>
+        <details style="margin-top:8px;color:var(--muted)"><summary>Is Easypaisa active?</summary><div style="margin-top:8px">Yes — Easypaisa is active and ready to use.</div></details>
+        <details style="margin-top:8px;color:var(--muted)"><summary>How do I provide PUBG ID?</summary><div style="margin-top:8px">You will enter ID, username & WhatsApp on checkout page after clicking Buy Now.</div></details>
+      </div>
+
+      <div id="reviews" class="box">
+        <h4 style="margin:0;color:var(--cyan)">Reviews</h4>
+        <p style="margin:8px 0;color:var(--muted)">Trusted by thousands — real player feedback coming soon.</p>
+      </div>
+    </div>
+  </section>
+
+  <aside class="sidebar">
+    <div class="box">
+      <h4 style="margin:0;color:var(--cyan)">Why choose us</h4>
+      <ul style="margin:10px 0 0 18px;color:var(--muted);line-height:1.6">
+        <li>Instant & safe delivery</li>
+        <li>24/7 support via WhatsApp</li>
+        <li>Trusted by 10k+ players</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h4 style="margin:0;color:var(--cyan)">Payment methods</h4>
+      <div class="pay-list" style="margin-top:10px">
+        <div class="pay-item pay-active"><strong>Easypaisa</strong> — Active</div>
+        <div class="pay-item"><strong>JazzCash</strong> — Coming Soon</div>
+        <div class="pay-item"><strong>Bank Transfer</strong> — Coming Soon</div>
+      </div>
+    </div>
+
+    <div class="box">
+      <h4 style="margin:0;color:var(--cyan)">Support</h4>
+      <p style="color:var(--muted);margin-top:10px">WhatsApp: +92-300-XXXXXXX</p>
+      <a class="btn" href="https://wa.me/92300XXXXXXX" target="_blank">Contact on WhatsApp</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  © 2025 PUBGServices • All rights reserved
+</footer>
+
+</body>
+</html>
