@@ -1,29 +1,72 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>ᴛʜᴀɴᴋ ʏᴏᴜ — ᴘᴜʙɢꜱᴇʀᴠɪᴄᴇꜱ</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Thank You — PUBGServices</title>
 <link rel="icon" href="data:,">
 <style>
-  body{margin:0;min-height:100vh;font-family:Inter,Arial;background:linear-gradient(180deg,#041020,#021022);color:#e8f8ff;display:flex;align-items:center;justify-content:center}
-  .card{width:min(900px,94%);padding:28px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.04));box-shadow:0 30px 90px rgba(0,0,0,0.6);text-align:center}
-  h2{margin:0;color:#33d1ff}
-  p{color:#a7c8d8}
-  .btn{display:inline-block;margin-top:16px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,#00aaff,#33d1ff);color:#021a22;text-decoration:none;font-weight:700}
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Inter', Arial, sans-serif;
+    background: linear-gradient(180deg, #041020, #021022);
+    color: #e8f8ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card {
+    width: min(900px, 94%);
+    padding: 28px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08));
+    box-shadow: 0 20px 60px rgba(0,0,0,0.65);
+    text-align: center;
+  }
+  h2 {
+    margin: 0;
+    color: #33d1ff;
+    font-size: 28px;
+    font-weight: 700;
+  }
+  p {
+    margin-top: 10px;
+    color: #a7c8d8;
+    font-size: 16px;
+  }
+  .btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 22px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #00aaff, #33d1ff);
+    color: #021a22;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    transition: 0.25s;
+  }
+  .btn:hover {
+    background: linear-gradient(90deg, #0095dd, #22bfff);
+  }
+  #info {
+    margin-top: 18px;
+    color: #cfeeff;
+    font-size: 15px;
+  }
 </style>
 </head>
 <body>
   <div class="card">
     <h2>Thank You! 🎉</h2>
-    <p style="margin-top:10px">ʏᴏᴜʀ ᴏʀᴅᴇʀ ʜᴀꜱ ʙᴇᴇɴ ʀᴇᴄᴇɪᴠᴇᴅ. ᴏᴜʀ ᴛᴇᴀᴍ ᴡɪʟʟ ꜱᴛᴀʀᴛ ᴅᴇʟɪᴠᴇʀʏ ᴏɴᴄᴇ ᴘᴀʏᴍᴇɴᴛ ɪꜱ ᴄᴏɴꜰɪʀᴍᴇᴅ.</p>
-    <div id="info" style="margin-top:16px;color:#cfeeff"></div>
-    <a class="btn" href="index.html">ʙᴀᴄᴋ ᴛᴏ ʜᴏᴍᴇ</a>
+    <p>Your order has been received. Our team will start delivery once payment is confirmed.</p>
+    <div id="info"></div>
+    <a class="btn" href="index.html">Back to Home</a>
   </div>
 
 <script>
-  // show minimal order info if present
-  const q = new URLSearchParams(window.location.search);
-  // the confirm page sends nothing by default (GET). We rely on sessionStorage
+  // Fetch order info from session storage
   const order = sessionStorage.getItem('planLabel') || '—';
   const price = sessionStorage.getItem('planPrice') || '—';
   const pubg = sessionStorage.getItem('pubgId') || '—';
@@ -31,18 +74,13 @@
   const whatsapp = sessionStorage.getItem('whatsapp') || '—';
 
   document.getElementById('info').innerHTML = `
-    <div style="font-weight:700">${order} • ${price ? price + ' ᴘᴋʀ ' : ''}</div>
-    <div style="margin-top:8px">ᴘᴜʙɢ: ${ᴘᴜʙɢ} • ${username}</div>
-    <div style="margin-top:8px">ᴡʜᴀᴛꜱᴀᴘᴘ: ${ᴡʜᴀᴛꜱᴀᴘᴘ}</div>
-    <div style="margin-top:12px;color:#9fb9cc;font-size:13px">ᴡᴇ ᴡɪʟʟ ᴄᴏɴᴛᴀᴄᴛ ʏᴏᴜ ᴏɴ ᴡʜᴀᴛꜱᴀᴘᴘ ꜰᴏʀ ᴜᴘᴅᴀᴛᴇꜱ. ᴋᴇᴇᴘ ʏᴏᴜʀ ᴀᴄᴄᴏᴜɴᴛ ᴀᴄᴄᴇꜱꜱɪʙʟᴇ ᴅᴜʀɪɴɢ ᴅᴇʟɪᴠᴇʀʏ.</div>
+    <div style="font-weight:700; font-size:16px">${order} • ${price ? price + ' PKR' : ''}</div>
+    <div style="margin-top:8px">PUBG ID: <strong>${pubg}</strong> • ${username}</div>
+    <div style="margin-top:8px">WhatsApp: <strong>${whatsapp}</strong></div>
+    <div style="margin-top:12px;color:#9fb9cc;font-size:13px">
+      We will contact you on WhatsApp for updates. Keep your account accessible during delivery.
+    </div>
   `;
-
-  // optionally clear session after a short time
-  // setTimeout(()=> sessionStorage.clear(), 60000);
 </script>
 </body>
-
 </html>
-
-
-
